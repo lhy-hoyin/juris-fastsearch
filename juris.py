@@ -1,9 +1,14 @@
 from sentence_transformers import SentenceTransformer
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.summarizers.luhn import LuhnSummarizer
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.nlp.stemmers import Stemmer
 from gradio_pdf import PDF
 from pathlib import Path
 import gradio as gr
 import chromadb
 import PyPDF2
+import nltk
 import time
 
 # dev imports
@@ -20,6 +25,11 @@ collection = client.create_collection('text_collection')
 # Load model for processing
 print('Loading modal...')
 model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Initialise and load summparizer
+print('Initialising summarizer resources...')
+nltk.download('punkt_tab')
+summarizer = LuhnSummarizer()
 
 def ingestPdfReadings(collection: chromadb.Collection, model: SentenceTransformer):
 
@@ -43,15 +53,17 @@ def ingestPdfReadings(collection: chromadb.Collection, model: SentenceTransforme
 
         # Extract text from pdf
         with open(path_str, 'rb') as f:
-            text = ''
+            full_text = ''
             pdf = PyPDF2.PdfReader(f)
             for page in pdf.pages:
-                text += page.extract_text()
-            #print(text)
+                full_text += page.extract_text()
 
-        # TODO: use something to summarise the full_text
+        # Summarise the full_text to focus on main points
+        parser = PlaintextParser.from_string(full_text, Tokenizer('english'))
+        summary = summarizer(parser.document, 10)
+        summary = ''.join([str(sentence) for sentence in summary])
 
-        readings['text'].append(text)
+        readings['text'].append(summary)
         readings['idx'].append(str(idx))
         readings['metadatas'].append({
             'path': path_str,
