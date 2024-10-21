@@ -1,40 +1,26 @@
 StackUp Campaign: [ChromaDB Essentials: From Theory to Application](https://earn.stackup.dev/campaigns/chromadb-essentials-from-theory-to-application)
-> 
 
-> [!NOTE]
-> This is a proof of concept for the purpose of [_Bounty: Advanced Image and Data Retrieval System Using ChromaDB_](https://earn.stackup.dev/campaigns/chromadb-essentials-from-theory-to-application/quests/bounty-advanced-image-and-data-retrieval-system-using-chromadb-48ba).
 ---
 
 # Juris FastSearch
 
-## Environment Setup
+Juris FastSearch is a legal case retrieval solution for the legal community to quickly and efficiently seach and retrieve relevant law cases and citations for their current case.
 
-### Create Python virtual environment
+#### Problem
 
-```
-python3 -m venv .venv
-```
+Currently, it is tedious for law professionals to prepare for their cases as they have to manually look for precedence or similar cases as part of their legal research. With advancement of Artificial Intelligence (AI), ChatGPT maybe a tempting solution to quickly resovle that. However, AI solutions are prone to "hallucinations", making up fake cases which may appear to support the user's case, as it has already [happened before](https://www.forbes.com/sites/mollybohannon/2023/06/08/lawyer-used-chatgpt-in-court-and-cited-fake-cases-a-judge-is-considering-sanctions/).
 
-### Activate virtual environment
+Juris FastSearch is able to quickly provide references without any risk of "hallucinations".Explore our [design](docs/Design.md) to see how we ensure that are able to provide relevant cases with any possibility of bogus cases.
 
-<details>
-<summary>On UNIX (macOS/Linux)</summary>
+#### Features & Usage
 
-```
-source .venv/bin/activate
-```
-</details>
+<TODO> Insert video / gif /etc </TODO>
 
-<details>
-<summary>On Windows</summary>
+[Key Features](docs/Features.md)
 
-```
-.venv\Scripts\activate
-```
-</details>
+Can't wait to try out Juris FastSearch? Check out the [installation guide](docs/Installation.md) to get started! We have also provided some [examples](docs/Examples.md) to demostrate to you how to use Juris FastSearch.
 
-### Install dependencies
+#### Disclaimer
 
-```
-pip install -r requirements.txt
-```
+> [!NOTE]
+> This is a proof of concept for the purpose of [_Bounty: Advanced Image and Data Retrieval System Using ChromaDB_](https://earn.stackup.dev/campaigns/chromadb-essentials-from-theory-to-application/quests/bounty-advanced-image-and-data-retrieval-system-using-chromadb-48ba).

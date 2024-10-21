@@ -1,6 +1,6 @@
 from sentence_transformers import SentenceTransformer
-from pathlib import Path
 from gradio_pdf import PDF
+from pathlib import Path
 import gradio as gr
 import chromadb
 import PyPDF2
@@ -92,8 +92,6 @@ def search(query):
     return filepaths, filepaths[0]
 
 def on_select_file(value, evt: gr.SelectData):
-    print('on_select', evt.index, evt.value)
-
     return 'data/' + evt.value
 
 # Gradio Interface Layout
@@ -102,9 +100,6 @@ with gr.Blocks() as gr_interface:
     with gr.Row():
         # Left Panel
         with gr.Column():
-            # Display the ingestion time of image embeddings
-            #gr.Markdown(f"**Image Ingestion Time**: {time_taken:.4f} seconds")
-
             gr.Markdown("### Search")
 
             # Input box for custom query
@@ -119,19 +114,21 @@ with gr.Blocks() as gr_interface:
             
             files = gr.Files(file_count='multiple')
 
+            gr.Markdown("### Performance")
+
+            # Display the ingestion time of image embeddings
+            #gr.Markdown(f"**Image Ingestion Time**: {time_taken:.4f} seconds")
+
             # Output for accuracy score and query time
-            accuracy_output = gr.Textbox(label="Performance")
+            accuracy_output = gr.Textbox(label="Accuracy")
+
+            #gr.Markdown("### Configuration")
+            #gr.Accordion()
 
         # Right Panel
         with gr.Column():
             gr.Markdown("### Viewer")
-            viewer = PDF(label="Document", value='')
-
-        # Button click handler for custom query submission
-        #submit_button.click(fn=on_click, inputs=custom_query, outputs=[image_output, accuracy_output])
-
-        # Cancel button to clear the inputs
-        #cancel_button.click(fn=lambda: (None, ""), outputs=[image_output, accuracy_output])
+            viewer = PDF(label="Document")
 
     custom_query.submit(fn=search, inputs=custom_query, outputs=[files, viewer])
 
