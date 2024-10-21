@@ -15,13 +15,13 @@ StackUp Campaign: [ChromaDB Essentials: From Theory to Application](https://earn
 python3 -m venv .venv
 ```
 
-### Activate virtal environment
+### Activate virtual environment
 
-<details open>
+<details>
 <summary>On UNIX (macOS/Linux)</summary>
 
 ```
-source .venv/bin/activate;
+source .venv/bin/activate
 ```
 </details>
 
@@ -29,7 +29,7 @@ source .venv/bin/activate;
 <summary>On Windows</summary>
 
 ```
-.venv\Scripts\activate;
+.venv\Scripts\activate
 ```
 </details>
 
