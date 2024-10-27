@@ -126,13 +126,13 @@ with gr.Blocks() as gr_interface:
             
             files = gr.Files(file_count='multiple')
 
-            gr.Markdown("### Performance")
+            #gr.Markdown("### Performance")
 
             # Display the ingestion time of image embeddings
             #gr.Markdown(f"**Image Ingestion Time**: {time_taken:.4f} seconds")
 
             # Output for accuracy score and query time
-            accuracy_output = gr.Textbox(label="Accuracy")
+            #accuracy_output = gr.Textbox(label="Accuracy")
 
             #gr.Markdown("### Configuration")
             #gr.Accordion()
