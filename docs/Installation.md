@@ -30,7 +30,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Run Application
+### Run application
 ```
 python3 juris.py
 ```
