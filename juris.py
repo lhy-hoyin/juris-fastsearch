@@ -142,7 +142,7 @@ with gr.Blocks(title='Juris FastSearch') as gr_interface:
 
             gr.Markdown("### Results")
             
-            files = gr.Files(file_count='multiple')
+            files = gr.Files(file_count='multiple', interactive=False)
 
             with gr.Accordion(label="Performance", open=True):
 
@@ -158,7 +158,7 @@ with gr.Blocks(title='Juris FastSearch') as gr_interface:
         # Right Panel
         with gr.Column():
             gr.Markdown("### Viewer")
-            viewer = PDF(label="Document")
+            viewer = PDF(label="Document", interactive=False)
 
     custom_query.submit(fn=search, inputs=custom_query, outputs=[files, viewer])
 
