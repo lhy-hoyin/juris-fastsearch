@@ -37,9 +37,9 @@ python3 juris.py
 
 ## Video Walkthrough - Codespace
 
-https://github.com/user-attachments/assets/f79fc252-400e-48f6-b432-6e75bf37af03
-
 <video src="Codespace_setup.mp4" controls></video>
+
+https://github.com/user-attachments/assets/f79fc252-400e-48f6-b432-6e75bf37af03
 
 <details open>
 <summary>Skip to sections</summary>
