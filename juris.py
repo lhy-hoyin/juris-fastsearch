@@ -1,7 +1,9 @@
+from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.summarizers.luhn import LuhnSummarizer
 from sumy.nlp.tokenizers import Tokenizer
+from functools import reduce
 from gradio_pdf import PDF
 from pathlib import Path
 import gradio as gr
@@ -12,6 +14,7 @@ import time
 
 ingestion_time = 0
 results_count = 3
+embeddings = None
 
 # Setup ChromaDB
 print('Setting up client...')
@@ -69,6 +72,7 @@ def ingestPdfReadings(collection: chromadb.Collection, model: SentenceTransforme
             'filename': path.name
         })
 
+    global embeddings
     embeddings = model.encode(readings['text'])
 
     collection.add(
@@ -98,9 +102,21 @@ def search(query):
         n_results=results_count  # Retrieve top x similar entries
     )
 
+    # Extract path from metadata 
     filepaths = [x['path'] for x in results['metadatas'][0]]
 
-    return filepaths, filepaths[0]
+    # calculate accuracy
+    accuracy = []
+    for _, matched_result_index in enumerate(results['ids'][0]):
+        matched_result_embedding = embeddings[int(matched_result_index)]
+        accuracy.append(cosine_similarity([matched_result_embedding],[query_embedding])[0][0])
+
+    def map_acc_to_str(accuracy_score):
+        return f'{accuracy_score:.4f}'
+
+    accuracy = '\n'.join(list(map(map_acc_to_str, accuracy)))
+
+    return filepaths, filepaths[0], accuracy
 
 def on_select_file(value, evt: gr.SelectData):
     return 'data/' + evt.value
@@ -150,9 +166,9 @@ with gr.Blocks(title='Juris FastSearch') as gr_interface:
                 gr.Markdown(f"Ingestion Time: *{ingestion_time:.4f} seconds*")
 
                 # Output for accuracy score and query time
-                #accuracy_output = gr.Textbox(label="Relevance (Accuracy)")
+                accuracy_output = gr.Textbox(label="Relevance (Accuracy)")
 
-            with gr.Accordion(label="Configuration", open=False):
+            with gr.Accordion(label="Preferences", open=False):
                 results_count_selector = gr.Textbox(label="Number of Results", value=results_count)
 
         # Right Panel
@@ -160,7 +176,7 @@ with gr.Blocks(title='Juris FastSearch') as gr_interface:
             gr.Markdown("### Viewer")
             viewer = PDF(label="Document", interactive=False)
 
-    custom_query.submit(fn=search, inputs=custom_query, outputs=[files, viewer])
+    custom_query.submit(fn=search, inputs=custom_query, outputs=[files, viewer, accuracy_output])
 
     files.select(fn=on_select_file, inputs=files, outputs=viewer)
 
