@@ -11,7 +11,7 @@ import nltk
 import time
 
 # dev imports
-from pprint import pprint
+results_count = 3
 
 # Setup ChromaDB
 print('Setting up client...')
@@ -95,7 +95,7 @@ def search(query):
     # Perform a vector search in the collection
     results = collection.query(
         query_embeddings=[query_embedding],
-        n_results=5  # Retrieve top 5 similar entries
+        n_results=results_count  # Retrieve top x similar entries
     )
 
     filepaths = [x['path'] for x in results['metadatas'][0]]
@@ -104,6 +104,22 @@ def search(query):
 
 def on_select_file(value, evt: gr.SelectData):
     return 'data/' + evt.value
+
+def on_results_count_change(value):
+    value = value.strip()
+
+    if len(value) <= 0 or not value.isnumeric() or int(value) <= 0:
+        """
+        No change if
+        - empty string
+        - string is not numeric
+        - number is not larger than 1
+        """
+        return
+
+    # Save new config
+    global results_count
+    results_count = max(1, int(value))
 
 # Gradio Interface Layout
 with gr.Blocks(title='Juris FastSearch') as gr_interface:
@@ -133,8 +149,8 @@ with gr.Blocks(title='Juris FastSearch') as gr_interface:
             # Output for accuracy score and query time
             #accuracy_output = gr.Textbox(label="Accuracy")
 
-            #gr.Markdown("### Configuration")
-            #gr.Accordion()
+            with gr.Accordion(label="Configuration", open=False):
+                results_count_selector = gr.Textbox(label="Number of Results", value=results_count)
 
         # Right Panel
         with gr.Column():
@@ -144,6 +160,7 @@ with gr.Blocks(title='Juris FastSearch') as gr_interface:
     custom_query.submit(fn=search, inputs=custom_query, outputs=[files, viewer])
 
     files.select(fn=on_select_file, inputs=files, outputs=viewer)
+    results_count_selector.change(fn=on_results_count_change, inputs=results_count_selector, outputs=None)
 
 
 if __name__ == '__main__':
