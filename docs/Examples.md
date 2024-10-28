@@ -24,8 +24,11 @@ For example, you have searched "Election votes" and wants to look at the documen
 You want to download the document _08-205 Citizens United v. Federal Election Comm'n.pdf_.
 
 1. Under the _Results_ section, beside _08-205 Citizens United v. Federal Election Comm'n.pdf_, click on "954.4 KB ⇣"
+2. From the popup, click to select where you want to download the file to
+3. Click on the **Save** button to dowload
 
 ![Example download document](imgs/Example-download-document.png)
+![Example download document popup](imgs/Example-download-document-popup.png)
 
 
 ## Change number of results to display
