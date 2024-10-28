@@ -2,7 +2,6 @@ from sentence_transformers import SentenceTransformer
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.summarizers.luhn import LuhnSummarizer
 from sumy.nlp.tokenizers import Tokenizer
-from sumy.nlp.stemmers import Stemmer
 from gradio_pdf import PDF
 from pathlib import Path
 import gradio as gr
@@ -107,7 +106,7 @@ def on_select_file(value, evt: gr.SelectData):
     return 'data/' + evt.value
 
 # Gradio Interface Layout
-with gr.Blocks() as gr_interface:
+with gr.Blocks(title='Juris FastSearch') as gr_interface:
     gr.Markdown("# Juris FastSearch")
     with gr.Row():
         # Left Panel
