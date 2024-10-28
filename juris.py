@@ -10,7 +10,7 @@ import PyPDF2
 import nltk
 import time
 
-# dev imports
+ingestion_time = 0
 results_count = 3
 
 # Setup ChromaDB
@@ -78,12 +78,12 @@ def ingestPdfReadings(collection: chromadb.Collection, model: SentenceTransforme
     )
 
     # Measure total ingestion time
+    global ingestion_time
     end_ingestion_time = time.time()
     ingestion_time = end_ingestion_time - start_ingestion_time
 
     # Log the ingestion performance
     print(f"Data ingestion time: {ingestion_time:.4f} seconds")
-    return ingestion_time
 
 def search(query):
     if not query.strip():
@@ -121,6 +121,9 @@ def on_results_count_change(value):
     global results_count
     results_count = max(1, int(value))
 
+# Ingest information
+ingestPdfReadings(collection, model)
+
 # Gradio Interface Layout
 with gr.Blocks(title='Juris FastSearch') as gr_interface:
     gr.Markdown("# Juris FastSearch")
@@ -141,13 +144,13 @@ with gr.Blocks(title='Juris FastSearch') as gr_interface:
             
             files = gr.Files(file_count='multiple')
 
-            #gr.Markdown("### Performance")
+            with gr.Accordion(label="Performance", open=True):
 
-            # Display the ingestion time of image embeddings
-            #gr.Markdown(f"**Image Ingestion Time**: {time_taken:.4f} seconds")
+                # Display the ingestion time of image embeddings
+                gr.Markdown(f"Ingestion Time: *{ingestion_time:.4f} seconds*")
 
-            # Output for accuracy score and query time
-            #accuracy_output = gr.Textbox(label="Accuracy")
+                # Output for accuracy score and query time
+                #accuracy_output = gr.Textbox(label="Relevance (Accuracy)")
 
             with gr.Accordion(label="Configuration", open=False):
                 results_count_selector = gr.Textbox(label="Number of Results", value=results_count)
@@ -160,13 +163,11 @@ with gr.Blocks(title='Juris FastSearch') as gr_interface:
     custom_query.submit(fn=search, inputs=custom_query, outputs=[files, viewer])
 
     files.select(fn=on_select_file, inputs=files, outputs=viewer)
+
     results_count_selector.change(fn=on_results_count_change, inputs=results_count_selector, outputs=None)
 
 
 if __name__ == '__main__':
-
-    time_taken = ingestPdfReadings(collection, model)
-
     # Launch the Gradio interface
     print('Ready! Launching interface ...')
     gr_interface.launch()
