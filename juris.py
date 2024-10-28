@@ -7,10 +7,18 @@ from functools import reduce
 from gradio_pdf import PDF
 from pathlib import Path
 import gradio as gr
-import chromadb
 import PyPDF2
 import nltk
 import time
+
+#"""
+import chromadb
+"""
+import sys
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+import chromadb
+#"""
 
 ingestion_time = 0
 results_count = 3
